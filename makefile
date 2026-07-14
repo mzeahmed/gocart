@@ -33,3 +33,29 @@ help: ## Show available commands
 	@echo ""
 	@awk 'BEGIN {FS = ":.*##"} /^[a-zA-Z0-9_-]+:.*##/ {printf "  \033[32m%-20s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 	@echo ""
+
+# ==============================================================================
+# Quality
+# ==============================================================================
+
+fmt: ## Format the source code
+	go fmt ./...
+
+vet: ## Run go vet
+	go vet ./...
+
+test: ## Run unit tests
+	go test ./...
+
+check: fmt vet test ## Run all quality checks
+
+# ==============================================================================
+# Dependencies
+# ==============================================================================
+
+tidy: ## Clean up go.mod / go.sum
+	go mod tidy
+
+update: ## Update dependencies
+	go get -u ./...
+	go mod tidy
